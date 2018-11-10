@@ -83,7 +83,10 @@ function outputImage(out, src, o) {
   var o = o||{};
   if(LOG) console.log('outputImage:', out);
   var dst = pathFilename(out)+path.extname(src);
-  if(!src.includes('://')) return fsCopyFile(src, dst);
+  if(!src.includes('://')) {
+    if(dst===src) return Promise.resolve(dst);
+    else return fsCopyFile(src, dst);
+  }
   var fmt = path.extname(out).substring(1);
   var url = imageConvert(src, fmt, o.convert);
   return fileDownload(out, url);
@@ -96,20 +99,26 @@ function outputVideo(out, aud, img, o) {
   return cpExec(`ffmpeg -y -err_detect explode -loop ${o.loop} -framerate ${o.framerate} -i "${img}" -i "${aud}" -vcodec ${o.vcodec} -crf ${o.crf} -preset ${o.preset} -tune ${o.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${o.acodec} -shortest "${out}"`, o.cp||{}).then(() => out);
 };
 
-// Write Full TTS output to file.
-async function stillvideo(out, txt, img, o) {
+/**
+ * Generate still video from an audio and image file, through machine (via "ffmpeg").
+ * @param {string} out Output video file.
+ * @param {string} aud Input audio file.
+ * @param {string} img Input image file.
+ * @param {object} o Options.
+ * @returns Promise <out> when done.
+ */
+async function stillvideo(out, aud, img, o) {
   var o = o||{};
   var u = Object.assign({}, OUTPUT, o.output);
-  if(LOG) console.log('@video:', out);
+  if(LOG) console.log('@video:', out, aud, img, o);
   var pth = pathFilename(out);
   var imge = img? path.extname(img):'.jpg';
   var imgp = u.image? pth+imge:tempy.file({extension: imge.substring(1)});
   if(img) img = await outputImage(imgp, img, o.image);
-  var aud = u.audio? pth+'.mp3':tempy.file({extension: 'mp3'});
-  aud = await english(aud, txt, o);
   if(img) await outputVideo(out, aud, img, o.video);
   if(!u.image && img) fs.unlink(img, FN_NOP);
   if(!u.audio) fs.unlink(aud, FN_NOP);
   return out;
 };
 module.exports = stillvideo;
+
