@@ -2,37 +2,36 @@ const randomItem = require('random-item');
 const download = require('download');
 const boolean = require('boolean');
 const tempy = require('tempy');
-const english = require('@wikipedia-tts/english');
 const urlParse = require('url').parse;
-const path = require('path');
 const cp = require('child_process');
+const path = require('path');
 const fs = require('fs');
 
 
 // Global variables
 const E = process.env;
-const FN_NOP = () => 0;
-const LOG = boolean(E['WIKIPEDIATTS_LOG']||'0');
+const LOG = boolean(E['STILLVIDEO_LOG']||'0');
 const OUTPUT = {
-  audio: boolean(E['WIKIPEDIATTS_OUTPUT_AUDIO']||'0'),
-  image: boolean(E['WIKIPEDIATTS_OUTPUT_IMAGE']||'0')
+  audio: boolean(E['STILLVIDEO_OUTPUT_AUDIO']||'0'),
+  image: boolean(E['STILLVIDEO_OUTPUT_IMAGE']||'0')
 };
 const VIDEO = {
-  loop: parseFloat(E['WIKIPEDIATTS_VIDEO_LOOP']||'1'),
-  framerate: parseFloat(E['WIKIPEDIATTS_VIDEO_FRAMERATE']||'1'),
-  vcodec: E['WIKIPEDIATTS_VIDEO_VCODEC']||'libx264',
-  crf: E['WIKIPEDIATTS_VIDEO_CRF']||'0',
-  preset: E['WIKIPEDIATTS_VIDEO_PRESET']||'veryfast',
-  tune: E['WIKIPEDIATTS_VIDEO_TUNE']||'stillimage',
-  acodec: E['WIKIPEDIATTS_VIDEO_ACODEC']||'copy'
-};
-const IMAGE_CONVERT = {
-  apiKey: E['FILESTACK_APIKEY']||''
+  loop: parseFloat(E['STILLVIDEO_VIDEO_LOOP']||'1'),
+  framerate: parseFloat(E['STILLVIDEO_VIDEO_FRAMERATE']||'1'),
+  vcodec: E['STILLVIDEO_VIDEO_VCODEC']||'libx264',
+  crf: E['STILLVIDEO_VIDEO_CRF']||'0',
+  preset: E['STILLVIDEO_VIDEO_PRESET']||'veryfast',
+  tune: E['STILLVIDEO_VIDEO_TUNE']||'stillimage',
+  acodec: E['STILLVIDEO_VIDEO_ACODEC']||'copy'
 };
 const CP = {
   sync: true,
   stdio: [0, 1, 2]
 };
+const IMAGE_CONVERT = {
+  apiKey: E['FILESTACK_APIKEY']||''
+};
+const FN_NOP = () => 0;
 
 
 // Get filename, without extension.
@@ -98,7 +97,7 @@ function outputVideo(out, aud, img, o) {
 };
 
 // Write Full TTS output to file.
-async function video(out, txt, img, o) {
+async function stillvideo(out, txt, img, o) {
   var o = o||{};
   var u = Object.assign({}, OUTPUT, o.output);
   if(LOG) console.log('@video:', out);
@@ -113,4 +112,4 @@ async function video(out, txt, img, o) {
   if(!u.audio) fs.unlink(aud, FN_NOP);
   return out;
 };
-module.exports = video;
+module.exports = stillvideo;
