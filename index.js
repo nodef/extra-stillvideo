@@ -101,24 +101,22 @@ function outputVideo(out, aud, img, o) {
 
 /**
  * Generate still video from an audio and image file, through machine (via "ffmpeg").
- * @param {string} out Output video file.
- * @param {string} aud Input audio file.
- * @param {string} img Input image file.
- * @param {object} o Options.
- * @returns Promise <out> when done.
+ * @param {string} out output video file.
+ * @param {string} aud input audio file.
+ * @param {string} img input image file.
+ * @param {object} o options.
+ * @returns promise <out> when done.
  */
 async function stillvideo(out, aud, img, o) {
   var o = o||{};
   var u = Object.assign({}, OUTPUT, o.output);
   if(LOG) console.log('@video:', out, aud, img, o);
-  var pth = pathFilename(out);
+  var pth = pathFilename(out), imgo = img;
   var imge = img? path.extname(img):'.jpg';
   var imgp = u.image? pth+imge:tempy.file({extension: imge.substring(1)});
   if(img) img = await outputImage(imgp, img, o.image);
   if(img) await outputVideo(out, aud, img, o.video);
-  if(!u.image && img) fs.unlink(img, FN_NOP);
-  if(!u.audio) fs.unlink(aud, FN_NOP);
+  if(!u.image && imgo && imgo!==img) fs.unlink(imgo, FN_NOP);
   return out;
 };
 module.exports = stillvideo;
-
