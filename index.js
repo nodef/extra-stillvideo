@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const randomItem = require('random-item');
 const download = require('download');
 const boolean = require('boolean');

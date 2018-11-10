@@ -1,8 +1,12 @@
 {
   "name": "extra-stillvideo",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Generate still video from an audio and image file, through machine (via \"ffmpeg\").",
   "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "stillvideo": "index.js"
+  },
   "scripts": {
     "test": "exit"
   },
