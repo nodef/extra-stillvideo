@@ -1,12 +1,6 @@
 Generate still video from an audio and image file, through machine (via "ffmpeg").
 
 
-## setup
-
-1. Follow setup at [@wikipedia-tts/english].
-2. Create [filestack] account, and set `FILESTACK_APIKEY` environment variable.
-
-
 ## usage
 
 ```javascript

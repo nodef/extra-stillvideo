@@ -11,10 +11,6 @@ const fs = require('fs');
 // Global variables
 const E = process.env;
 const LOG = boolean(E['STILLVIDEO_LOG']||'0');
-const OUTPUT = {
-  audio: boolean(E['STILLVIDEO_OUTPUT_AUDIO']||'0'),
-  image: boolean(E['STILLVIDEO_OUTPUT_IMAGE']||'0')
-};
 const VIDEO = {
   loop: parseFloat(E['STILLVIDEO_VIDEO_LOOP']||'1'),
   framerate: parseFloat(E['STILLVIDEO_VIDEO_FRAMERATE']||'1'),
@@ -120,3 +116,24 @@ async function stillvideo(out, aud, img, o) {
   return out;
 };
 module.exports = stillvideo;
+
+// Run on console.
+async function console(A) {
+  var out = 'out.mp4', aud = '', img = '', o = {};
+  for(var i=2, I=A.length; i<I; i++) {
+    if(A[i]==='--help') return cp.execSync('less README.md', {cwd: __dirname, stdio: [0, 1, 2]});
+    else if(A[i]==='-o' || A[i]==='--output') out = A[++i];
+    else if(A[i]==='-a' || A[i]==='--audio') aud = A[++i];
+    else if(A[i]==='-i' || A[i]==='--image') img = A[++i];
+    else if(A[i]==='-vl' || A[i]==='--video_loop') Object.assign(o, {video: {loop: parseInt(A[++i], 10)}});
+    else if(A[i]==='-vf' || A[i]==='--video_framerate') Object.assign(o, {video: {framerate: parseFloat(A[++i])}});
+    else if(A[i]==='-vv' || A[i]==='--video_vcodec') Object.assign(o, {video: {vcodec: A[++i]}});
+    else if(A[i]==='-vc' || A[i]==='--video_crf') Object.assign(o, {video: {crf: A[++i]}});
+    else if(A[i]==='-vp' || A[i]==='--video_preset') Object.assign(o, {video: {preset: A[++i]}});
+    else if(A[i]==='-vt' || A[i]==='--video_tune') Object.assign(o, {video: {tune: A[++i]}});
+    else if(A[i]==='-va' || A[i]==='--video_acodec') Object.assign(o, {video: {acodec: A[++i]}});
+    else return console.error(`stillvideo: Unexpected input "${A[i]}"`);
+  }
+  await stillvideo(out, aud, img, o);
+};
+if(require.main===module) console(process.argv);
