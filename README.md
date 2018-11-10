@@ -98,3 +98,4 @@ All your suggestions are welcome. Find out more creative things to do, and if th
 ["ffmpeg"]: https://ffmpeg.org/
 [Upload Wikipedia TTS videos on YouTube]: https://www.youtube.com/results?search_query=wikipedia+audio+article
 ["Pixelsphere OST (2017)"]: https://www.youtube.com/watch?v=RCryNyHbSDc&list=PLNEveYilIj1AV5-ETDCHufWazEHRcP8o-
+[creating an issue]: https://github.com/nodef/extra-stillvideo/issues
