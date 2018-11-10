@@ -104,15 +104,13 @@ function outputVideo(out, aud, img, o) {
  * @returns promise <out> when done.
  */
 async function stillvideo(out, aud, img, o) {
-  var o = o||{};
-  var u = Object.assign({}, OUTPUT, o.output);
+  var o = o||{}, imgo = img;
   if(LOG) console.log('@video:', out, aud, img, o);
-  var pth = pathFilename(out), imgo = img;
   var imge = img? path.extname(img):'.jpg';
-  var imgp = u.image? pth+imge:tempy.file({extension: imge.substring(1)});
+  var imgp = tempy.file({extension: imge.substring(1)});
   if(img) img = await outputImage(imgp, img, o.image);
   if(img) await outputVideo(out, aud, img, o.video);
-  if(!u.image && imgo && imgo!==img) fs.unlink(imgo, FN_NOP);
+  if(imgo && imgo!==img) fs.unlink(imgo, FN_NOP);
   return out;
 };
 module.exports = stillvideo;
