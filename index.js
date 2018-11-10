@@ -1,5 +1,5 @@
-const downloadFile = require('download-file');
 const randomItem = require('random-item');
+const download = require('download');
 const boolean = require('boolean');
 const tempy = require('tempy');
 const urlParse = require('url').parse;
@@ -66,11 +66,7 @@ function cpExec(cmd, o) {
 // Download file, return promise.
 function fileDownload(out, url) {
   if(LOG) console.log('fileDownload:', out, url);
-  var opt = {directory: path.dirname(out), filename: path.basename(out)};
-  return new Promise((fres, frej) => downloadFile(url, opt, (err) => {
-    if(err) frej(err);
-    else fres(out);
-  }));
+  return download(url, path.dirname(out), {filename: path.basename(out)}).then(() => out);
 };
 
 // Convert image URL to given format.
