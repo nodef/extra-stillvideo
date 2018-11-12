@@ -2,8 +2,6 @@
 const boolean = require('boolean');
 const _ = require('lodash');
 const cp = require('child_process');
-const path = require('path');
-const fs = require('fs');
 
 
 // Global variables
@@ -56,13 +54,14 @@ function stillvideo(out, aud, img, o) {
 module.exports = stillvideo;
 
 // Run on console.
-async function console(A) {
+function shell(A) {
   var out = 'out.mp4', aud = '', img = '', o = {};
   for(var i=2, I=A.length; i<I; i++) {
     if(A[i]==='--help') return cp.execSync('less README.md', {cwd: __dirname, stdio: [0, 1, 2]});
     else if(A[i]==='-o' || A[i]==='--output') out = A[++i];
     else if(A[i]==='-a' || A[i]==='--audio') aud = A[++i];
     else if(A[i]==='-i' || A[i]==='--image') img = A[++i];
+    else if(A[i]==='-l' || A[i]==='--log') Object.assign(o, {log: true});
     else if(A[i]==='-vl' || A[i]==='--video_loop') Object.assign(o, {video: {loop: parseInt(A[++i], 10)}});
     else if(A[i]==='-vf' || A[i]==='--video_framerate') Object.assign(o, {video: {framerate: parseFloat(A[++i])}});
     else if(A[i]==='-vv' || A[i]==='--video_vcodec') Object.assign(o, {video: {vcodec: A[++i]}});
@@ -72,6 +71,6 @@ async function console(A) {
     else if(A[i]==='-va' || A[i]==='--video_acodec') Object.assign(o, {video: {acodec: A[++i]}});
     else return console.error(`stillvideo: Unexpected input "${A[i]}"`);
   }
-  await stillvideo(out, aud, img, o);
+  return stillvideo(out, aud, img, o);
 };
-if(require.main===module) console(process.argv);
+if(require.main===module) shell(process.argv);

@@ -27,7 +27,8 @@ stillvideo -a speech.mp3 -i photo.jpg -o speech.mp4
 
 ```bash
 stillvideo [options]
-# --help: show this help
+# --help:    show this help
+# -l, --log: enable log
 # -o, --output: set output video file (out.mp4)
 # -a, --audio:  set input audio file
 # -i, --image:  set input image file
@@ -76,6 +77,7 @@ stillvideo(output, audio, image, options={})
 
 // Default options
 options = {
+  log: false, // enable log
   video: {
     loop: 1,            // set video loop
     framerate: 1,       // set video framerate
