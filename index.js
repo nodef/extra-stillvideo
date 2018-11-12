@@ -51,7 +51,7 @@ function stillvideo(out, aud, img, o) {
   var l = o.log, v = o.video;
   var cmd = `ffmpeg -y -loop ${v.loop} -framerate ${v.framerate} -i "${img}" -i "${aud}" -vcodec ${v.vcodec} -crf ${v.crf} -preset ${v.preset} -tune ${v.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${v.acodec} -shortest "${out}"`;
   if(l) { console.log('@video:', out, aud, img); console.log('-cpExec:', cmd); }
-  return cpExec(cmd, l? Object.assign({}, a.cp, CP):a.cp).then(() => out);
+  return cpExec(cmd, l? Object.assign({}, v.cp, CP):v.cp).then(() => out);
 };
 module.exports = stillvideo;
 
