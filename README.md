@@ -7,6 +7,12 @@ Sample: ["Pixelsphere OST (2017)"].
 <br>
 
 
+## setup
+
+1. Install [Node.js], if not installed.
+2. Run `npm install -g extra-stillvideo` in [console].
+
+
 ## console
 
 ```bash
@@ -65,7 +71,7 @@ stillvideo(output, audio, image, options={})
 // output:  output video file
 // audio:   input audio file
 // image:   input image file
-// options: optional
+// options: given below
 // -> Promise <output>
 
 // Default options
@@ -88,9 +94,14 @@ options = {
 <br>
 
 
-## contribute
+## similar
 
-All your suggestions are welcome. Find out more creative things to do, and if this tool doesn't manage, contribute by [creating an issue].
+Do you need anything similar?
+- [extra-googletts] can generate spoken audio from text.
+- [extra-youtubeuploader] can upload videos with caption to YouTube.
+
+Suggestions are welcome. Please [create an issue].
+<br>
 
 
 [![nodef](https://i.imgur.com/33z4S5l.jpg)](https://nodef.github.io)
@@ -98,4 +109,7 @@ All your suggestions are welcome. Find out more creative things to do, and if th
 ["ffmpeg"]: https://ffmpeg.org/
 [Upload Wikipedia TTS videos on YouTube]: https://www.youtube.com/results?search_query=wikipedia+audio+article
 ["Pixelsphere OST (2017)"]: https://www.youtube.com/watch?v=RCryNyHbSDc&list=PLNEveYilIj1AV5-ETDCHufWazEHRcP8o-
-[creating an issue]: https://github.com/nodef/extra-stillvideo/issues
+
+[extra-googletts]: https://www.npmjs.com/package/extra-googletts
+[extra-youtubeuploader]: https://www.npmjs.com/package/extra-youtubeuploader
+[create an issue]: https://github.com/nodef/extra-stillvideo/issues

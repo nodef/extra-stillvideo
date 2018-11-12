@@ -38,7 +38,6 @@ function pathFilename(pth) {
 
 // Copy file, return promise.
 function fsCopyFile(src, dst, flags=0) {
-  if(LOG) console.log('fsCopyFile:', src, dst);
   return new Promise((fres, frej) => {
     fs.copyFile(src, dst, flags, (err) => {
       if(err) frej(err);
@@ -49,9 +48,7 @@ function fsCopyFile(src, dst, flags=0) {
 
 // Execute child process, return promise.
 function cpExec(cmd, o) {
-  o = Object.assign({}, CP, o);
-  if(LOG) console.log('cpExec:', cmd);
-  if(o.sync) return Promise.resolve({stdout: cp.execSync(cmd, o)});
+  if(o && o.sync) return Promise.resolve({stdout: cp.execSync(cmd, o)});
   return new Promise((fres, frej) => {
     cp.exec(cmd, o, (err, stdout, stderr) => {
       if(err) frej(err);
