@@ -8,16 +8,14 @@ const cp = require('child_process');
 const E = process.env;
 const OPTIONS = {
   log: boolean(E['STILLVIDEO_LOG']||'0'),
-  video: {
-    loop: parseFloat(E['STILLVIDEO_VIDEO_LOOP']||'1'),
-    framerate: parseFloat(E['STILLVIDEO_VIDEO_FRAMERATE']||'1'),
-    vcodec: E['STILLVIDEO_VIDEO_VCODEC']||'libx264',
-    crf: E['STILLVIDEO_VIDEO_CRF']||'0',
-    preset: E['STILLVIDEO_VIDEO_PRESET']||'veryfast',
-    tune: E['STILLVIDEO_VIDEO_TUNE']||'stillimage',
-    acodec: E['STILLVIDEO_VIDEO_ACODEC']||'copy',
-    cp: null
-  }
+  loop: parseFloat(E['STILLVIDEO_LOOP']||'1'),
+  framerate: parseFloat(E['STILLVIDEO_FRAMERATE']||'1'),
+  vcodec: E['STILLVIDEO_VCODEC']||'libx264',
+  crf: E['STILLVIDEO_CRF']||'0',
+  preset: E['STILLVIDEO_PRESET']||'veryfast',
+  tune: E['STILLVIDEO_TUNE']||'stillimage',
+  acodec: E['STILLVIDEO_ACODEC']||'copy',
+  cp: null
 };
 const CP = {
   sync: true,
@@ -45,11 +43,10 @@ function cpExec(cmd, o) {
  * @returns promise <out> when done.
  */
 function stillvideo(out, aud, img, o) {
-  var o = _.merge({}, OPTIONS, o);
-  var l = o.log, v = o.video;
-  var cmd = `ffmpeg -y -loop ${v.loop} -framerate ${v.framerate} -i "${img}" -i "${aud}" -vcodec ${v.vcodec} -crf ${v.crf} -preset ${v.preset} -tune ${v.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${v.acodec} -shortest "${out}"`;
+  var o = _.merge({}, OPTIONS, o), l = o.log;
+  var cmd = `ffmpeg -y -loop ${o.loop} -framerate ${o.framerate} -i "${img}" -i "${aud}" -vcodec ${o.vcodec} -crf ${o.crf} -preset ${o.preset} -tune ${o.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${o.acodec} -shortest "${out}"`;
   if(l) { console.log('@video:', out, aud, img); console.log('-cpExec:', cmd); }
-  return cpExec(cmd, l? Object.assign({}, v.cp, CP):v.cp).then(() => out);
+  return cpExec(cmd, l? Object.assign({}, o.cp, CP):o.cp).then(() => out);
 };
 module.exports = stillvideo;
 
@@ -61,14 +58,14 @@ function shell(A) {
     else if(A[i]==='-o' || A[i]==='--output') out = A[++i];
     else if(A[i]==='-a' || A[i]==='--audio') aud = A[++i];
     else if(A[i]==='-i' || A[i]==='--image') img = A[++i];
-    else if(A[i]==='-l' || A[i]==='--log') Object.assign(o, {log: true});
-    else if(A[i]==='-vl' || A[i]==='--video_loop') Object.assign(o, {video: {loop: parseInt(A[++i], 10)}});
-    else if(A[i]==='-vf' || A[i]==='--video_framerate') Object.assign(o, {video: {framerate: parseFloat(A[++i])}});
-    else if(A[i]==='-vv' || A[i]==='--video_vcodec') Object.assign(o, {video: {vcodec: A[++i]}});
-    else if(A[i]==='-vc' || A[i]==='--video_crf') Object.assign(o, {video: {crf: A[++i]}});
-    else if(A[i]==='-vp' || A[i]==='--video_preset') Object.assign(o, {video: {preset: A[++i]}});
-    else if(A[i]==='-vt' || A[i]==='--video_tune') Object.assign(o, {video: {tune: A[++i]}});
-    else if(A[i]==='-va' || A[i]==='--video_acodec') Object.assign(o, {video: {acodec: A[++i]}});
+    else if(A[i]==='-l' || A[i]==='--log') _.merge(o, {log: true});
+    else if(A[i]==='-ol' || A[i]==='--loop') _.merge(o, {loop: parseInt(A[++i], 10)});
+    else if(A[i]==='-of' || A[i]==='--framerate') _.merge(o, {framerate: parseFloat(A[++i])});
+    else if(A[i]==='-ov' || A[i]==='--vcodec') _.merge(o, {vcodec: A[++i]});
+    else if(A[i]==='-oc' || A[i]==='--crf') _.merge(o, {crf: A[++i]});
+    else if(A[i]==='-op' || A[i]==='--preset') _.merge(o, {preset: A[++i]});
+    else if(A[i]==='-ot' || A[i]==='--tune') _.merge(o, {tune: A[++i]});
+    else if(A[i]==='-oa' || A[i]==='--acodec') _.merge(o, {acodec: A[++i]});
     else return console.error(`stillvideo: Unexpected input "${A[i]}"`);
   }
   return stillvideo(out, aud, img, o);

@@ -11,6 +11,8 @@ Sample: ["Pixelsphere OST (2017)"].
 
 1. Install [Node.js], if not installed.
 2. Run `npm install -g extra-stillvideo` in [console].
+3. To install this as a package use `npm install extra-stillvideo`.
+<br>
 
 
 ## console
@@ -32,23 +34,26 @@ stillvideo [options]
 # -o, --output: set output video file (out.mp4)
 # -a, --audio:  set input audio file
 # -i, --image:  set input image file
-# -vl, --video_loop:      set video loop (1)
-# -vf, --video_framerate: set video framerate (1)
-# -vv, --video_vcodec:    set video vcodec (libx264)
-# -vc, --video_crf:       set video CRF (0)
-# -vp, --video_preset:    set video preset (veryfast)
-# -vt, --video_tune:      set video tune (stillimage)
-# -va, --video_acodec:    set video acodec (copy)
+# -ol, --loop:      set loop (1)
+# -of, --framerate: set framerate (1)
+# -ov, --vcodec:    set vcodec (libx264)
+# -oc, --crf:       set CRF (0)
+# -op, --preset:    set preset (veryfast)
+# -ot, --tune:      set tune (stillimage)
+# -oa, --acodec:    set acodec (copy)
 
 # Environment variables:
 $STILLVIDEO_LOG # enable log (0)
-$STILLVIDEO_VIDEO_LOOP      # set video loop (1)
-$STILLVIDEO_VIDEO_FRAMERATE # set video framerate (1)
-$STILLVIDEO_VIDEO_VCODEC    # set video vcodec (libx264)
-$STILLVIDEO_VIDEO_CRF       # set video CRF (0)
-$STILLVIDEO_VIDEO_PRESET    # set video preset (veryfast)
-$STILLVIDEO_VIDEO_TUNE      # set video tune (stillimage)
-$STILLVIDEO_VIDEO_ACODEC    # set video acodec (copy)
+$STILLVIDEO_OUTPUT # set output video file (out.mp4)
+$STILLVIDEO_AUDIO  # set input audio file
+$STILLVIDEO_IMAGE  # set input image file
+$STILLVIDEO_LOOP      # set video loop (1)
+$STILLVIDEO_FRAMERATE # set video framerate (1)
+$STILLVIDEO_VCODEC    # set video vcodec (libx264)
+$STILLVIDEO_CRF       # set video CRF (0)
+$STILLVIDEO_PRESET    # set video preset (veryfast)
+$STILLVIDEO_TUNE      # set video tune (stillimage)
+$STILLVIDEO_ACODEC    # set video acodec (copy)
 ```
 <br>
 
@@ -78,18 +83,16 @@ stillvideo(output, audio, image, options={})
 // Default options
 options = {
   log: false, // enable log
-  video: {
-    loop: 1,            // set video loop
-    framerate: 1,       // set video framerate
-    vcodec: 'libx264',  // set video vcodec
-    crf: 0,             // set video CRF
-    preset: 'veryfast', // set video preset
-    tune: 'stillimage', // set video tune
-    acodec: 'copy'      // set video acodec
-    cp: {
-      sync: true,       // enable synchronous child process
-      stdio: [0, 1, 2]  // set child process stdio
-    }
+  loop: 1,            // set loop
+  framerate: 1,       // set framerate
+  vcodec: 'libx264',  // set vcodec
+  crf: 0,             // set CRF
+  preset: 'veryfast', // set preset
+  tune: 'stillimage', // set tune
+  acodec: 'copy'      // set acodec
+  cp: {
+    sync: true,       // enable synchronous child process
+    stdio: [0, 1, 2]  // set child process stdio
   }
 }
 ```
@@ -103,7 +106,7 @@ Do you need anything similar?
 - [extra-youtubeuploader] can upload videos with caption to YouTube.
 
 Suggestions are welcome. Please [create an issue].
-<br>
+<br><br>
 
 
 [![nodef](https://i.imgur.com/33z4S5l.jpg)](https://nodef.github.io)
