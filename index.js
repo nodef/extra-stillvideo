@@ -6,6 +6,7 @@ const cp = require('child_process');
 
 // Global variables
 const E = process.env;
+const STDIO = [0, 1, 2];
 const OPTIONS = {
   log: boolean(E['STILLVIDEO_LOG']||'0'),
   loop: parseFloat(E['STILLVIDEO_LOOP']||'1'),
@@ -14,24 +15,18 @@ const OPTIONS = {
   crf: E['STILLVIDEO_CRF']||'0',
   preset: E['STILLVIDEO_PRESET']||'veryfast',
   tune: E['STILLVIDEO_TUNE']||'stillimage',
-  acodec: E['STILLVIDEO_ACODEC']||'copy',
-  cp: null
-};
-const CP = {
-  sync: true,
-  stdio: [0, 1, 2]
+  acodec: E['STILLVIDEO_ACODEC']||'copy'
 };
 
 
 // Execute child process, return promise.
 function cpExec(cmd, o) {
-  if(o && o.sync) return Promise.resolve({stdout: cp.execSync(cmd, o)});
-  return new Promise((fres, frej) => {
-    cp.exec(cmd, o, (err, stdout, stderr) => {
-      if(err) frej(err);
-      else fres({stdout, stderr});
-    });
-  });
+  var o = o||{}, stdio = o.log || o.stdio==null? STDIO:o.stdio;
+  if(o.log) console.log('-cpExec:', cmd);
+  if(stdio===STDIO) return Promise.resolve({stdout: cp.execSync(cmd, {stdio})});
+  return new Promise((fres, frej) => cp.exec(cmd, {stdio}, (err, stdout, stderr) => {
+    return err? frej(err):fres({stdout, stderr});
+  }));
 };
 
 /**
@@ -43,10 +38,9 @@ function cpExec(cmd, o) {
  * @returns promise <out> when done.
  */
 function stillvideo(out, aud, img, o) {
-  var o = _.merge({}, OPTIONS, o), l = o.log;
-  var cmd = `ffmpeg -y -loop ${o.loop} -framerate ${o.framerate} -i "${img}" -i "${aud}" -vcodec ${o.vcodec} -crf ${o.crf} -preset ${o.preset} -tune ${o.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${o.acodec} -shortest "${out}"`;
-  if(l) { console.log('@video:', out, aud, img); console.log('-cpExec:', cmd); }
-  return cpExec(cmd, l? Object.assign({}, o.cp, CP):o.cp).then(() => out);
+  var o = _.merge({}, OPTIONS, o);
+  if(o.log) console.log('@stillvideo:', out, aud, img);
+  return cpExec(`ffmpeg -y -loop ${o.loop} -framerate ${o.framerate} -i "${img}" -i "${aud}" -vcodec ${o.vcodec} -crf ${o.crf} -preset ${o.preset} -tune ${o.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${o.acodec} -shortest "${out}"`, o);
 };
 module.exports = stillvideo;
 

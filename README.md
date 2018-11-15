@@ -82,7 +82,8 @@ stillvideo(output, audio, image, options={})
 
 // Default options
 options = {
-  log: false, // enable log
+  stdio: [0, 1, 2],   // set child process stdio
+  log: false,         // enable log
   loop: 1,            // set loop
   framerate: 1,       // set framerate
   vcodec: 'libx264',  // set vcodec
@@ -90,10 +91,6 @@ options = {
   preset: 'veryfast', // set preset
   tune: 'stillimage', // set tune
   acodec: 'copy'      // set acodec
-  cp: {
-    sync: true,       // enable synchronous child process
-    stdio: [0, 1, 2]  // set child process stdio
-  }
 }
 ```
 <br>
