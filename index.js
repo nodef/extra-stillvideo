@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const boolean = require('boolean');
+const tempy = require('tempy');
 const _ = require('lodash');
 const cp = require('child_process');
 
@@ -8,6 +9,8 @@ const cp = require('child_process');
 const E = process.env;
 const STDIO = [0, 1, 2];
 const OPTIONS = {
+  stdio: null,
+  help: false,
   log: boolean(E['STILLVIDEO_LOG']||'0'),
   loop: parseFloat(E['STILLVIDEO_LOOP']||'1'),
   framerate: parseFloat(E['STILLVIDEO_FRAMERATE']||'1'),
@@ -15,15 +18,19 @@ const OPTIONS = {
   crf: E['STILLVIDEO_CRF']||'0',
   preset: E['STILLVIDEO_PRESET']||'veryfast',
   tune: E['STILLVIDEO_TUNE']||'stillimage',
-  acodec: E['STILLVIDEO_ACODEC']||'copy'
+  acodec: E['STILLVIDEO_ACODEC']||'copy',
+  resizeX: E['STILLVIDEO_RESIZEX'],
+  resizeY: E['STILLVIDEO_RESIZEY'],
+  fitX: E['STILLVIDEO_FITX'],
+  fitY: E['STILLVIDEO_FITY']
 };
 
 
 // Execute child process, return promise.
 function cpExec(cmd, o) {
-  var o = o||{}, stdio = o.log || o.stdio==null? STDIO:o.stdio;
+  var o = o||{}, stdio = o.log? o.stdio||STDIO:o.stdio||[];
   if(o.log) console.log('-cpExec:', cmd);
-  if(stdio===STDIO) return Promise.resolve({stdout: cp.execSync(cmd, {stdio})});
+  if(o.stdio==null) return Promise.resolve({stdout: cp.execSync(cmd, {stdio})});
   return new Promise((fres, frej) => cp.exec(cmd, {stdio}, (err, stdout, stderr) => {
     return err? frej(err):fres({stdout, stderr});
   }));
@@ -37,7 +44,7 @@ function cpExec(cmd, o) {
  * @param {object} o options.
  * @returns promise <out> when done.
  */
-function stillvideo(out, aud, img, o) {
+async function stillvideo(out, aud, img, o) {
   var o = _.merge({}, OPTIONS, o);
   if(o.log) console.log('@stillvideo:', out, aud, img);
   return cpExec(`ffmpeg -y -loop ${o.loop} -framerate ${o.framerate} -i "${img}" -i "${aud}" -vcodec ${o.vcodec} -crf ${o.crf} -preset ${o.preset} -tune ${o.tune} -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -acodec ${o.acodec} -shortest "${out}"`, o);
