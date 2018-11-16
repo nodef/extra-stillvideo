@@ -41,6 +41,10 @@ stillvideo [options]
 # -op, --preset:    set preset (veryfast)
 # -ot, --tune:      set tune (stillimage)
 # -oa, --acodec:    set acodec (copy)
+# -rx, --resizex:   set image resize-x
+# -ry, --resizey:   set image resize-y
+# -fx, --fitx:      set image fit-x
+# -fy, --fity:      set image fit-y
 
 # Environment variables:
 $STILLVIDEO_LOG # enable log (0)
@@ -54,6 +58,10 @@ $STILLVIDEO_CRF       # set video CRF (0)
 $STILLVIDEO_PRESET    # set video preset (veryfast)
 $STILLVIDEO_TUNE      # set video tune (stillimage)
 $STILLVIDEO_ACODEC    # set video acodec (copy)
+$STILLVIDEO_RESIZEX   # set image resize-x
+$STILLVIDEO_RESIZEY   # set image resize-y
+$STILLVIDEO_FITX      # set image fit-x
+$STILLVIDEO_FITY      # set image fit-y
 ```
 <br>
 
@@ -90,7 +98,11 @@ options = {
   crf: 0,             // set CRF
   preset: 'veryfast', // set preset
   tune: 'stillimage', // set tune
-  acodec: 'copy'      // set acodec
+  acodec: 'copy',     // set acodec
+  resizeX: 0,         // set image resize-x
+  resizeY: 0,         // set image resize-y
+  fitX: 0,            // set image fit-x
+  fitY: 0             // set image fit-y
 }
 ```
 <br>

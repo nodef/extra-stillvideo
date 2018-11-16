@@ -26,10 +26,10 @@ const OPTIONS = {
   preset: E['STILLVIDEO_PRESET']||'veryfast',
   tune: E['STILLVIDEO_TUNE']||'stillimage',
   acodec: E['STILLVIDEO_ACODEC']||'copy',
-  resizeX: E['STILLVIDEO_RESIZEX'],
-  resizeY: E['STILLVIDEO_RESIZEY'],
-  fitX: E['STILLVIDEO_FITX'],
-  fitY: E['STILLVIDEO_FITY']
+  resizeX: parseInt(E['STILLVIDEO_RESIZEX']||'0', 10),
+  resizeY: parseInt(E['STILLVIDEO_RESIZEY']||'0', 10),
+  fitX: parseInt(E['STILLVIDEO_FITX']||'0', 10),
+  fitY: parseInt(E['STILLVIDEO_FITY']||'0', 10)
 };
 const FN_NOP = () => 0;
 
@@ -46,16 +46,16 @@ function cpExec(cmd, o) {
 
 // Transform image to proper size.
 async function imageTransform(pth, o) {
-  var ext = path.extname(pth);
+  var fmt = path.extname(pth).substring(1);
+  var dst = tempy.file({extension: 'jpg'});
   var img = await Jimp.read(pth);
   var w0 = img.bitmap.width, h0 = img.bitmap.height;
   if(o.resizeX || o.resizeY) img.resize(o.resizeX||Jimp.AUTO, o.resizeY||Jimp.AUTO);
   if(o.fitX && o.fitY) img.scaleToFit(o.fitX, o.fitY);
-  pth = tempy.file({extension: 'jpg'});
-  await img.write(pth);
   var w1 = img.bitmap.width, h1 = img.bitmap.height;
-  if(o.log) console.log('-imageTransform:', `${ext} ${w0}x${h0} -> jpg ${w1}x${h1}`);
-  return pth;
+  if(o.log) console.log('-imageTransform:', `${fmt} ${w0}x${h0} -> jpg ${w1}x${h1}`);
+  await img.writeAsync(dst);
+  return dst;
 };
 
 /**
@@ -106,7 +106,7 @@ module.exports = stillvideo;
 function shell(a) {
   var o = options(a);
   if(o.help) return cp.execSync('less README.md', {cwd: __dirname, stdio: STDIO});
-  else if(o.input) return console.error(`@stillvideo: Unexpected input "${A[i]}"`);
+  else if(o.input) return console.error(`@stillvideo: Unexpected input "${a[i]}"`);
   return stillvideo(null, null, null, o);
 };
 if(require.main===module) shell(process.argv);
