@@ -51,7 +51,7 @@ async function imageTransform(pth, o) {
   var img = await Jimp.read(pth);
   var w0 = img.bitmap.width, h0 = img.bitmap.height;
   if(o.resizeX || o.resizeY) img.resize(o.resizeX||Jimp.AUTO, o.resizeY||Jimp.AUTO);
-  if(o.fitX && o.fitY) img.scaleToFit(o.fitX, o.fitY);
+  if(o.fitX && o.fitY && (w0>o.fitX || h0>o.fitY)) img.scaleToFit(o.fitX, o.fitY);
   var w1 = img.bitmap.width, h1 = img.bitmap.height;
   if(o.log) console.log('-imageTransform:', `${fmt} ${w0}x${h0} -> jpg ${w1}x${h1}`);
   await img.writeAsync(dst);
