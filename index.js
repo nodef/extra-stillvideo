@@ -77,34 +77,33 @@ async function stillvideo(out, aud, img, o) {
 };
 
 // Get options from arguments.
-function options(a, z={}) {
-  for(var i=2, I=a.length; i<I; i++) {
-    if(a[i]==='--help') z.help = true;
-    else if(a[i]==='-l' || a[i]==='--log') z.log = true;
-    else if(a[i]==='-o' || a[i]==='--output') z.output = a[++i];
-    else if(a[i]==='-a' || a[i]==='--audio') z.audio = a[++i];
-    else if(a[i]==='-i' || a[i]==='--image') z.image = a[++i];
-    else if(a[i]==='-ol' || a[i]==='--loop') z.loop = parseInt(a[++i], 10);
-    else if(a[i]==='-of' || a[i]==='--framerate') z.framerate = parseFloat(a[++i]);
-    else if(a[i]==='-ov' || a[i]==='--vcodec') z.vcodec = a[++i];
-    else if(a[i]==='-oc' || a[i]==='--crf') z.crf = a[++i];
-    else if(a[i]==='-op' || a[i]==='--preset') z.preset = a[++i];
-    else if(a[i]==='-ot' || a[i]==='--tune') z.tune = a[++i];
-    else if(a[i]==='-oa' || a[i]==='--acodec') z.acodec = a[++i];
-    else if(a[i]==='-rx' || a[i]==='--resizex') z.resizeX = parseFloat(a[++i]);
-    else if(a[i]==='-ry' || a[i]==='--resizey') z.resizeY = parseFloat(a[++i]);
-    else if(a[i]==='-fx' || a[i]==='--fitx') z.fitX = parseFloat(a[++i]);
-    else if(a[i]==='-fy' || a[i]==='--fity') z.fitY = parseFloat(a[++i]);
-    else z.input = a[i];
-  }
-  return z;
+function options(o, k, a, i) {
+  if(k==='--help') o.help = true;
+  else if(k==='-l' || k==='--log') o.log = true;
+  else if(k==='-o' || k==='--output') o.output = a[++i];
+  else if(k==='-a' || k==='--audio') o.audio = a[++i];
+  else if(k==='-i' || k==='--image') o.image = a[++i];
+  else if(k==='-ol' || k==='--loop') o.loop = parseInt(a[++i], 10);
+  else if(k==='-of' || k==='--framerate') o.framerate = parseFloat(a[++i]);
+  else if(k==='-ov' || k==='--vcodec') o.vcodec = a[++i];
+  else if(k==='-oc' || k==='--crf') o.crf = a[++i];
+  else if(k==='-op' || k==='--preset') o.preset = a[++i];
+  else if(k==='-ot' || k==='--tune') o.tune = a[++i];
+  else if(k==='-oa' || k==='--acodec') o.acodec = a[++i];
+  else if(k==='-rx' || k==='--resizex') o.resizeX = parseFloat(a[++i]);
+  else if(k==='-ry' || k==='--resizey') o.resizeY = parseFloat(a[++i]);
+  else if(k==='-fx' || k==='--fitx') o.fitX = parseFloat(a[++i]);
+  else if(k==='-fy' || k==='--fity') o.fitY = parseFloat(a[++i]);
+  else o.input = a[i];
+  return i+1;
 };
 stillvideo.options = options;
 module.exports = stillvideo;
 
 // Run on shell.
 function shell(a) {
-  var o = options(a);
+  for(var i=0, I=a.length, o={}; i<I; i++)
+    i = options(o, a[i], a, i);
   if(o.help) return cp.execSync('less README.md', {cwd: __dirname, stdio: STDIO});
   else if(o.input) return console.error(`@stillvideo: Unexpected input "${a[i]}"`);
   return stillvideo(null, null, null, o);
