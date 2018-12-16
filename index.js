@@ -102,10 +102,10 @@ module.exports = stillvideo;
 
 // Run on shell.
 function shell(a) {
-  for(var i=0, I=a.length, o={}; i<I;)
+  for(var i=2, I=a.length, o={}; i<I;)
     i = options(o, a[i], a, i);
   if(o.help) return cp.execSync('less README.md', {cwd: __dirname, stdio: STDIO});
-  else if(o.input) return console.error(`@stillvideo: Unexpected input "${a[i]}"`);
+  else if(o.input) return console.error(`@stillvideo: Unexpected input "${o.input}"`);
   return stillvideo(o.output, o.audio, o.image, o);
 };
 if(require.main===module) shell(process.argv);
