@@ -1,6 +1,6 @@
 {
   "name": "extra-stillvideo",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Generate still video from an audio and image file, through machine (via \"ffmpeg\").",
   "main": "index.js",
   "preferGlobal": true,
@@ -35,10 +35,10 @@
   },
   "homepage": "https://github.com/nodef/extra-stillvideo#readme",
   "dependencies": {
-    "boolean": "^0.2.0",
+    "boolean": "^3.0.1",
     "extra-ffmpeg": "^4.0.3",
-    "jimp": "^0.5.6",
-    "lodash": "^4.17.13",
-    "tempy": "^0.2.1"
+    "jimp": "^0.9.5",
+    "lodash": "^4.17.15",
+    "tempy": "^0.5.0"
   }
 }
