@@ -124,6 +124,8 @@ Suggestions are welcome. Please [create an issue].
 [Upload Wikipedia TTS videos on YouTube]: https://www.youtube.com/results?search_query=wikipedia+audio+article
 ["Pixelsphere OST (2017)"]: https://www.youtube.com/watch?v=RCryNyHbSDc&list=PLNEveYilIj1AV5-ETDCHufWazEHRcP8o-
 
+![](https://ga-beacon.deno.dev/G-RC63DPBH3P:SH3Eq-NoQ9mwgYeHWxu7cw/github.com/nodef/extra-stillvideo)
+
 [extra-googletts]: https://www.npmjs.com/package/extra-googletts
 [extra-youtubeuploader]: https://www.npmjs.com/package/extra-youtubeuploader
 [create an issue]: https://github.com/nodef/extra-stillvideo/issues
